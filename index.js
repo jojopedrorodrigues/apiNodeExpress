@@ -8,7 +8,7 @@ app.use(cors());
 app.use(bodyParser.json());
 const pool = mysql.createPool({
     host: 'a',
-    user: '1',
+    user: 'a',
     database: 'a',
     password: 'a'
 });
@@ -18,7 +18,7 @@ async function createTableIfNotExists() {
         await pool.execute(`
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                numero VARCHAR(255) NOT NULL,
+                numero VARCHAR(255) NOT NULL UNIQUE,
                 statusLogin VARCHAR(50) NOT NULL,
                 premium VARCHAR(50) NOT NULL,
                 dataTerminoPremium DATE NOT NULL,
@@ -26,12 +26,12 @@ async function createTableIfNotExists() {
                 codeAuth VARCHAR(255) NOT NULL
             );
         `);
-        console.log("Table checked/created successfully!");
+        console.log("Criado com sucesso");
     } catch (error) {
-        console.error("Error creating table:", error.message);
+        console.error("Erro ao criar uma tabela:", error.message);
     }
 }
-app.use(cors());
+
 app.post('/user', async (req, res) => {
     try {
         const { numero, statusLogin, premium, dataTerminoPremium, acesso, codeAuth } = req.body;
@@ -45,23 +45,14 @@ app.post('/user', async (req, res) => {
     }
 });
 
-app.put('/user/:id', async (req, res) => {
+app.put('/user/numero/:numero', async (req, res) => {
     try {
         const { numero, statusLogin, premium, dataTerminoPremium, acesso, codeAuth } = req.body;
         await pool.execute(
-            "UPDATE users SET numero = ?, statusLogin = ?, premium = ?, dataTerminoPremium = ?, acesso = ?, codeAuth = ? WHERE id = ?",
-            [numero, statusLogin, premium, dataTerminoPremium, acesso, codeAuth, req.params.id]
+            "UPDATE users SET numero = ?, statusLogin = ?, premium = ?, dataTerminoPremium = ?, acesso = ?, codeAuth = ? WHERE numero = ?",
+            [numero, statusLogin, premium, dataTerminoPremium, acesso, codeAuth, req.params.numero]
         );
-        res.json({ message: "User updated successfully!" });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-app.delete('/user/:id', async (req, res) => {
-    try {
-        await pool.execute("DELETE FROM users WHERE id = ?", [req.params.id]);
-        res.json({ message: "User deleted successfully!" });
+        res.json({ message: "Ocorreu tudo certo" });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
