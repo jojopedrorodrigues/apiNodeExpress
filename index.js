@@ -7,10 +7,7 @@ const PORT = 21071;
 app.use(cors());
 app.use(bodyParser.json());
 const pool = mysql.createPool({
-    host: 'mysql.pixonline.org',
-    user: 'pixonline01',
-    database: 'pixonline01',
-    password: '4522atul'
+
 });
 
 async function createTableIfNotExists() {
