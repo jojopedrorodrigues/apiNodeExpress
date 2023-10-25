@@ -3,14 +3,14 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
 const app = express();
-const PORT = 3000;
+const PORT = 21071;
 app.use(cors());
 app.use(bodyParser.json());
 const pool = mysql.createPool({
-    host: 'a',
-    user: 'a',
-    database: 'a',
-    password: 'a'
+    host: 'mysql.pixonline.org',
+    user: 'pixonline01',
+    database: 'pixonline01',
+    password: '4522atul'
 });
 
 async function createTableIfNotExists() {
